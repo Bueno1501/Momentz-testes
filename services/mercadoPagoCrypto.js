@@ -64,7 +64,8 @@ function descriptografarToken(tokenCriptografado) {
     const decipher = crypto.createDecipheriv(
         ALGORITHM,
         getEncryptionKey(),
-        Buffer.from(ivHex, 'hex')
+        Buffer.from(ivHex, 'hex'),
+        { authTagLength: 16 }
     );
 
     decipher.setAuthTag(Buffer.from(authTagHex, 'hex'));
