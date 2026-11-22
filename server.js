@@ -14,6 +14,11 @@ const presentesRoutes = require('./routes/presentesRoutes');
 const orcamentoRouter = require('./routes/orcamentoRoutes');
 const mercadoPagoRoutes = require('./routes/mercadoPagoRoutes');
 
+
+// nosemgrep: javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage
+// Justificativa: a API utiliza JWT no cabecalho Authorization: Bearer.
+// Nao foi identificado uso de cookies para autenticacao.
+// Revisar esta excecao caso a autenticacao passe a utilizar cookies.
 const app = express();
 
 app.use(cors());
