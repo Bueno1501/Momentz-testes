@@ -1,0 +1,65 @@
+
+name: CI MOMENTZ-TESTES
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  testes-node:
+    name: Testes Node.js
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Executar testes Node.js
+        run: node --test testes/eventos.test.js
+
+  testes-flutter:
+    name: Testes Flutter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Instalar dependencias
+        working-directory: frontend
+        run: flutter pub get
+
+      - name: Executar testes Flutter
+        working-directory: frontend
+        run: flutter test test/validacao_cadastro_test.dart
+
+  semgrep:
+    name: Analise de seguranca
+    runs-on: ubuntu-latest
+
+    container:
+      image: semgrep/semgrep:latest
+
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+
+      - name: Executar Semgrep
+        run: semgrep scan --config p/default --error .
